@@ -1,8 +1,8 @@
 # greencover-clone
 study build base map by vuejs, d3, mapbox
 
-#install
+# install
 yarn
 
-#run
+# run
 yarn serve
