@@ -13,8 +13,8 @@
                   dense
                   v-model="select"
                   return-object
-                  :items="items"
-                  item-text="state"
+                  :items="aoi"
+                  item-text="name"
                 ></v-select>
               </div>
             </div>
@@ -264,7 +264,11 @@
                 </v-tabs>
               </v-card>
             </div>
-            <div class="ml-6 d-flex flex-column" style="height: calc(100% - 5px); width: 50%;"></div>
+            <div class="ml-6 d-flex flex-column" style="height: calc(100% - 5px); width: 50%;">
+              <v-card>
+                <Dashboard :chartData="chart_data"/>
+              </v-card>
+            </div>
           </div>
         </div>
       </div>
@@ -273,21 +277,58 @@
 </template>
 
 <script>
+import Dashboard from '@/components/Dashboard'
+import api from '@/api/Api'
+
 export default {
   name: 'OverviewDB',
+  components: {
+    Dashboard
+  },
   data() {
     return {
+      month: [],
+      chart_data: [],
+      aoi: [],
       select: {state:'Jaipur'},
-      items: [
-        {state:'Jaipur'},
-        {state:'Jodhpur'},
-        {state:'Kota'},
-        {state:'Mumbai'},
-        {state:'Nagpur'},
-        {state:'Pune'},
-        {state:'Singapore'},
-      ]
     }
+  },
+  methods: {
+    titleChart() {
+      this.month.forEach(y => {
+        this.chart_data.unshift({
+          data: 1648, 
+          production: 9613, 
+          year: y
+        })
+      })
+    }
+  },
+  async created() {
+    // aoi
+    let resultAoi = await api.getAoi()
+    this.aoi = resultAoi.data.data
+    this.select = this.aoi[0]
+
+    // get month
+    let resultMonth = await api.getMonth()
+    this.month = resultMonth.data.data
+    this.titleChart(this.month)
+    console.log(this.month);
+
+    // dashboard
+    let params = {
+      month: this.month[1].split('-')[1],
+      compare_month: this.month[0].split('-')[1],
+      compare_year: this.month[0].split('-')[0],
+      year: this.month[1].split('-')[0],
+      source: 'sentinel',
+      overview_type: 'overall_green_cover',
+      aoi_id: 215,
+    }
+    let resultData = await api.getData(params)
+
+    console.log(resultData);
   }
 }
 </script>
