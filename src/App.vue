@@ -1,17 +1,19 @@
 <template>
   <v-app>
-    <v-main>
+    <v-header>
       <Header />
-      <Overview />
-      <!-- <button class="color-red">hello</button>
-      <v-btn outlined="false"></v-btn> -->
+    </v-header>
+    <v-main>
+      <!-- <Body /> -->
+      <Chart />
     </v-main>
   </v-app>
 </template>
 
 <script>
-import Header from './views/HomePage.vue'
-import Overview from './components/Overview.vue'
+import Header from './views/Header.vue'
+// import Body from './views/Body.vue'
+import Chart from '@/components/Dashboard.vue'
 
 export default {
     name: "App",
@@ -20,7 +22,8 @@ export default {
 
     components: {
       Header,
-      Overview
+      // Body,
+      Chart
     },
 
     methods: {
