@@ -1,7 +1,7 @@
 <template>
-  <v-card class="overview">
-    <v-card-text class="no-padding">
-      <div class="content">
+  <v-card class="overview rounded-lg">
+    <v-card-text class="no-padding" style="height: 100%">
+      <div class="content" style="height: 100%">
         <v-layout class="card-header align-center">
           <v-layout class="aoi align-center px-5">
             <span><b>Overview of Changes in</b></span>
@@ -48,8 +48,82 @@
             </v-layout>
           </div>
         </v-layout>
-        <div class="card-content">
-          dashboard
+        <div class="card-content pa-3" style="height: calc(100% - 70px)">
+          <v-layout class="fill-height pa-3 elevation-2 rounded-lg">
+            <!-- <v-layout class="fill-height pa-3 elevation-2 rounded-lg"> -->
+            <v-row>
+              <v-col cols="12" md="6">
+                <v-card
+                  class="elevation-2 rounded-tl-lg rounded-bl-lg fill-height"
+                  style="background-color: #f7f3f8"
+                >
+                  <v-tabs
+                    v-model="tab"
+                    background-color="backgroundColor2"
+                    color="primary"
+                    fixed-tabs
+                  >
+                    <v-tab>GREEN COVER</v-tab>
+                    <v-tab>PLANT HEALTH</v-tab>
+                    <v-tab>PLANT DENSITY</v-tab>
+                  </v-tabs>
+
+                  <v-tabs-items v-model="tab">
+                    <v-tab-item> 1 </v-tab-item>
+                    <v-tab-item>
+                      <PlantHealth />
+                    </v-tab-item>
+                    <v-tab-item> 3 </v-tab-item>
+                  </v-tabs-items>
+                </v-card>
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-card class="rounded-tr-lg rounded-br-lg fill-height">
+                  <v-layout class="flex-column fill-height">
+                    <div class="map" style="height: 50%">map</div>
+                    <div class="db" style="height: 50%">
+                      <v-row>
+                        <v-col cols="12" md="8">
+                          <div class="dashboard" style="width: 100%">
+                            <span class="text-header-chart"
+                              >Recorded trends of Green Cover Change</span
+                            >
+                            <Dashboard />
+                          </div>
+                        </v-col>
+                        <v-col cols="12" md="4">
+                          <div class="choose-option scroll-container">
+                            <v-btn>
+                              icon-reload
+                              <!-- <v-icon></v-icon> -->
+                            </v-btn>
+                            <v-expansion-panels accordion flat>
+                              <v-expansion-panel
+                                v-for="(item, i) in options_dashboard"
+                                :key="i"
+                                >
+                                <v-expansion-panel-header class="pl-2 pr-2 mb-2" style="box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 4px inset; border-radius: 7px;">
+                                <v-layout class="fill-height align-center" style="color: rgb(128, 8, 250);">
+                                  <v-icon>mdi-drag</v-icon>
+                                  <v-checkbox hide-details>input</v-checkbox>
+                                  <span>{{ item.name }}</span>
+                                </v-layout>
+                              </v-expansion-panel-header>
+                                <v-expansion-panel-content>
+                                  {{ item.options }}
+                                </v-expansion-panel-content>
+                              </v-expansion-panel>
+                            </v-expansion-panels>
+                          </div>
+                        </v-col>
+                      </v-row>
+                    </div>
+                  </v-layout>
+                </v-card>
+              </v-col>
+            </v-row>
+            <!-- </v-layout> -->
+          </v-layout>
         </div>
       </div>
     </v-card-text>
@@ -57,20 +131,45 @@
 </template>
 
 <script>
+import PlantHealth from "@/components/overview/PlantHealth.vue";
+import Dashboard from "@/components/overview/Dashboard.vue";
+
 export default {
-  name: 'OverviewDB',
+  name: "OverviewDB",
+  components: {
+    PlantHealth,
+    Dashboard,
+  },
   data() {
     return {
-      select: '1',
-      items: ['1', '2', '3']
-    }
-  }
-}
+      tab: 1,
+      select: "1",
+      items: ["1", "2", "3"],
+      options_dashboard: [
+        {
+          name: "Forest cover change",
+          options: "22",
+        },
+        {
+          name: "Forest cover",
+          options: "22",
+        },
+        {
+          name: "Plant health",
+          options: "22",
+        },
+        {
+          name: "Plant density",
+          options: "22",
+        }
+      ],
+    };
+  },
+};
 </script>
 
 <style scoped>
 .overview {
-  border-radius: 10px;
   margin: 0px 36px 16px;
   width: 100%;
 }
@@ -100,5 +199,19 @@ export default {
 }
 .select-time {
   width: 180px;
+}
+.text-header-chart {
+  font-size: 22px;
+  font-weight: 500;
+  padding-left: 24px;
+  color: #893ff2;
+}
+.v-input {
+  margin-top: 0;
+  padding-top: 0;
+}
+.v-expansion-panel-header {
+  min-height: 32px;
+  padding: 0;
 }
 </style>

@@ -1,13 +1,13 @@
 <template>
-  <div>
+  <!-- <v-layout class="fill-height"> -->
     <!-- chart -->
     <D3BarChart
       :config="chart_config"
       :datum="chart_data"
       :title="chart_title"
-      :source="chart_source"
+      :height="250"
     ></D3BarChart>
-  </div>
+  <!-- </v-layout> -->
 </template>
 
 <script>
@@ -21,7 +21,6 @@ export default {
   data() {
     return {
       chart_title: 'Your title goes here',
-      chart_source: 'Your source goes here',
       chart_data: [
         //...
         {hours: 1648, production: 9613, year: '2007'},
@@ -32,11 +31,15 @@ export default {
       chart_config: {
         key: 'year',
         currentKey: '2004',
-        values: ['hours'],
+        values: ['hours', 'production'],
         axis: {
-          yTicks: 3
+          xTicks: 3,
         },
         color: {
+          keys: {
+            hours: '#333',
+            production: '#d3d3d3',
+          },
           default: '#222f3e',
           current: '#41B882'
         }

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 // import HomePage from '@/views/HomePage.vue'
-import Dashboard from '@/components/Dashboard.vue'
+// import Dashboard from '@/components/Dashboard.vue'
 
 Vue.use(VueRouter)
 
@@ -12,12 +12,12 @@ const routes = [
   //   component: HomePage,
   //   // beforeEnter: checkAuth,
   // },
-  {
-    path: '/dashboard',
-    name: 'Dashboard',
-    component: Dashboard,
-    // beforeEnter: checkAuth,
-  },
+  // {
+  //   path: '/dashboard',
+  //   name: 'Dashboard',
+  //   component: Dashboard,
+  //   // beforeEnter: checkAuth,
+  // },
   {path: '*', component: () => import('../views/error/NotFound.vue')}
 ]
 

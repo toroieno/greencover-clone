@@ -9,7 +9,8 @@ export default new Vuetify({
     themes: {
       light: {
         primary: '#893ff2',
-        'backgroud-color': '#f4ecfd'
+        backgroundColor: '#f4ecfd',
+        backgroundColor2: '#f7f3f8'
       }
     }
   }
