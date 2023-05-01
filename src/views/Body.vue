@@ -26,8 +26,14 @@
         </v-card>
       </v-layout>
     </v-layout>
-    <v-layout class="fill-height">
-      <Overview />
+    <v-layout class="fill-height" style="position: relative;">
+      <v-overlay absolute :value="isLoading">
+        <v-progress-circular
+          indeterminate
+          size="64"
+        ></v-progress-circular>
+      </v-overlay>
+      <Overview :isLoading="isLoading" @update:isLoading="updateLoading"/>
     </v-layout>
   </v-layout>
 </template>
@@ -37,6 +43,16 @@ import Overview from '@/components/Overview'
 
 export default {
   name: 'Body-db',
+  data() {
+    return {
+      isLoading: false,
+    }
+  },
+  methods: {
+    updateLoading(status) {
+      this.isLoading = status
+    }
+  },
   components: {
     Overview
   },

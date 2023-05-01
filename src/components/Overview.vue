@@ -8,10 +8,12 @@
             <div class="pl-3 select-input">
               <v-select
                 class="select-aoi"
-                v-model="select"
-                :items="items"
+                v-model="selectAoi"
+                :items="aois"
                 :menu-props="{ top: false, offsetY: true }"
                 label="Label"
+                item-text="name"
+                item-value="id"
                 solo
                 dense
               ></v-select>
@@ -131,6 +133,7 @@
 </template>
 
 <script>
+import api from '@/api/Api'
 import PlantHealth from "@/components/overview/PlantHealth.vue";
 import Dashboard from "@/components/overview/Dashboard.vue";
 
@@ -140,10 +143,16 @@ export default {
     PlantHealth,
     Dashboard,
   },
+  props: {
+    isLoading: Boolean,
+  },
   data() {
     return {
+      aois: [],
       tab: 1,
-      select: "1",
+      selectAoi: {},
+      compareMonth: '',
+      month: '',
       items: ["1", "2", "3"],
       options_dashboard: [
         {
@@ -165,6 +174,18 @@ export default {
       ],
     };
   },
+  async mounted() {
+    this.$emit('update:isLoading', true)
+    let resultAoi = await api.getAoi()
+    this.aois = resultAoi.data.data
+    this.selectAoi = this.aois[0]
+    console.log(this.aois);
+
+    let resultMonth = await api.getMonth()
+    console.log(resultMonth);
+    this.$emit('update:isLoading', false)
+    console.log(this.isLoading);
+  }
 };
 </script>
 
