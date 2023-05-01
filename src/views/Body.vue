@@ -1,5 +1,5 @@
 <template>
-  <v-layout class="fill-height d-flex fill-width" style="background-color: #f4ecfd;">
+  <v-layout class="fill-height d-flex flex-column" style="background-color: #f4ecfd;">
     <v-layout class="option flex-row">
       <!-- tab -->
       <div class="tab">
@@ -26,16 +26,19 @@
         </v-card>
       </v-layout>
     </v-layout>
+    <v-layout class="fill-height">
+      <Overview />
+    </v-layout>
   </v-layout>
 </template>
 
 <script>
-// import Overview from '@/components/Overview'
+import Overview from '@/components/Overview'
 
 export default {
   name: 'Body-db',
   components: {
-    // Overview
+    Overview
   },
 }
 </script>
@@ -44,13 +47,10 @@ export default {
 .option {
   height: 66px;
 }
-.tab {
-  width: 240px;
-}
 .tab-1 {
   border-top: 2px solid #893ff2;
   background-color: transparent;
-  width: 240px;
+  width: 260px;
   height: 36px;
 }
 .tab-1:hover {
