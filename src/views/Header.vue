@@ -1,12 +1,10 @@
 <template>
-  <div>
-    <v-toolbar style="height: 64px;">
-      <v-toolbar-title>
-        <v-img src="/assets/imgs/logo.png" width="85" height="50" class="ml-2"></v-img>
-        <div>
-          <h3 class="primary--text">DASHBOAD</h3>
-        </div>
-      </v-toolbar-title>
+  <div class="container">
+    <v-toolbar class="main-header" flat>
+      <img alt="logo" src="/assets/imgs/logo.png" width="85" height="50" class="ml-2" />
+      <div class="pr-8 pl-4">
+        <h3 class="db primary--text">DASHBOAD</h3>
+      </div>
     </v-toolbar>
   </div>
 </template>
@@ -15,6 +13,17 @@ export default {
   name: "header-db",
 }
 </script>
-<style lang="">
-  
+<style scoped>
+.container {
+  width: 100%;
+  margin: 0;
+}
+.v-toolbar {
+  background-color: #f4effa !important;
+  height: 64px;
+  border-bottom: 1px solid #d3d3d3;
+}
+.db {
+  cursor: pointer;
+}
 </style>
