@@ -82,7 +82,9 @@
               <v-col cols="12" md="6">
                 <v-card class="rounded-tr-lg rounded-br-lg fill-height">
                   <v-layout class="flex-column fill-height">
-                    <div class="map" style="height: 50%">map</div>
+                    <div class="map" style="height: 50%">
+                      <MapBox />
+                    </div>
                     <div class="db" style="height: 50%">
                       <v-row>
                         <v-col cols="12" md="8">
@@ -136,12 +138,14 @@
 import api from '@/api/Api'
 import PlantHealth from "@/components/overview/PlantHealth.vue";
 import Dashboard from "@/components/overview/Dashboard.vue";
+import MapBox from "@/components/overview/MapBox.vue";
 
 export default {
   name: "OverviewDB",
   components: {
     PlantHealth,
     Dashboard,
+    MapBox
   },
   props: {
     isLoading: Boolean,
@@ -150,6 +154,7 @@ export default {
     return {
       aois: [],
       tab: 1,
+      select: '',
       selectAoi: {},
       compareMonth: '',
       month: '',
@@ -174,8 +179,17 @@ export default {
       ],
     };
   },
+  methods: {
+    loading() {
+      this.$emit('update:isLoading', true)
+    },
+    loaded() {
+      this.$emit('update:isLoading', false)
+    }
+  },
   async mounted() {
-    this.$emit('update:isLoading', true)
+    this.loading()
+
     let resultAoi = await api.getAoi()
     this.aois = resultAoi.data.data
     this.selectAoi = this.aois[0]
@@ -183,8 +197,8 @@ export default {
 
     let resultMonth = await api.getMonth()
     console.log(resultMonth);
-    this.$emit('update:isLoading', false)
-    console.log(this.isLoading);
+
+    this.loaded()
   }
 };
 </script>

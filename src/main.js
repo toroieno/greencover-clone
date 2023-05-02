@@ -5,7 +5,9 @@ import App from './App.vue';
 import vuetify from './plugins/vuetify';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
-import './assets/styles.css'
+
+import './assets/styles.css'; // general styles
+import 'mapbox-gl/dist/mapbox-gl.css'; // import mapbox-gl
 
 Vue.use(ElementUI);
 
