@@ -311,7 +311,7 @@
             </div>
             <div class="ml-6 d-flex flex-column" style="height: calc(100% - 5px); width: 50%;">
               <v-card>
-                <Dashboard :chartData="chart_data"/>
+                
               </v-card>
             </div>
           </div>
@@ -322,13 +322,12 @@
 </template>
 
 <script>
-import Dashboard from '@/components/Dashboard'
+
 import api from '@/api/Api'
 
 export default {
   name: 'OverviewDB',
   components: {
-    Dashboard
   },
   data() {
     return {
