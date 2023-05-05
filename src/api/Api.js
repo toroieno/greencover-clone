@@ -24,6 +24,10 @@ class Api {
   getMonth() {
     return this.submit('get', 'https://greencover.eofactory.ai/api/v1/imageries/months?source=sentinel&aoi_id=215')
   }
+
+  getData() {
+    return this.submit('get', 'https://greencover.eofactory.ai/api/v1/imageries/statistics?month=02&compare_month=01&compare_year=2023&year=2023&source=sentinel&overview_type=overall_green_cover&aoi_id=215')
+  }
 }
 
 export default new Api()

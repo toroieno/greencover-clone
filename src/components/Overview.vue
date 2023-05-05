@@ -23,36 +23,61 @@
             <v-layout class="month align-center">
               <span><b>Compare Month</b></span>
               <div class="pl-3 select-input">
-                <v-select
-                  class="select-time"
-                  v-model="select"
-                  :items="items"
-                  :menu-props="{ top: false, offsetY: true }"
-                  label="Label"
-                  solo
-                  dense
-                ></v-select>
+                <v-menu
+                  v-model="menu"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="auto"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="date"
+                      append-icon="mdi-calendar"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-model="date"
+                    @input="menu2 = false"
+                  ></v-date-picker>
+                </v-menu>
               </div>
             </v-layout>
             <v-layout class="month align-center ml-3 mr-3">
               <span><b>VS Month</b></span>
               <div class="pl-3 select-input">
-                <v-select
-                  class="select-time"
-                  v-model="select"
-                  :items="items"
-                  :menu-props="{ top: false, offsetY: true }"
-                  label="Label"
-                  solo
-                  dense
-                ></v-select>
+                <v-menu
+                  v-model="menu"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="auto"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="date"
+                      append-icon="mdi-calendar"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-model="date"
+                    @input="menu2 = false"
+                  ></v-date-picker>
+                </v-menu>
               </div>
             </v-layout>
           </div>
         </v-layout>
         <div class="card-content pa-3" style="height: calc(100% - 70px)">
           <v-layout class="fill-height pa-3 elevation-2 rounded-lg">
-            <!-- <v-layout class="fill-height pa-3 elevation-2 rounded-lg"> -->
             <v-row>
               <v-col cols="12" md="6">
                 <v-card
@@ -80,12 +105,12 @@
                 </v-card>
               </v-col>
               <v-col cols="12" md="6">
-                <v-card class="rounded-tr-lg rounded-br-lg fill-height">
+                <v-card class="elevation-0 rounded-tr-lg rounded-br-lg fill-height">
                   <v-layout class="flex-column fill-height">
                     <div class="map" style="height: 50%">
                       <MapBox />
                     </div>
-                    <div class="db" style="height: 50%">
+                    <div class="db" style="height: 50%; padding-top: 20px;">
                       <v-row>
                         <v-col cols="12" md="8">
                           <div class="dashboard" style="width: 100%">
@@ -96,11 +121,10 @@
                           </div>
                         </v-col>
                         <v-col cols="12" md="4">
-                          <div class="choose-option scroll-container">
-                            <v-btn>
-                              icon-reload
-                              <!-- <v-icon></v-icon> -->
-                            </v-btn>
+                          <v-layout class="btn-icon align-end justify-end mb-5">
+                            <v-icon class="btn-reload">mdi-reload</v-icon>
+                          </v-layout>
+                          <div class="choose-option">
                             <v-expansion-panels accordion flat>
                               <v-expansion-panel
                                 v-for="(item, i) in options_dashboard"
@@ -126,7 +150,6 @@
                 </v-card>
               </v-col>
             </v-row>
-            <!-- </v-layout> -->
           </v-layout>
         </div>
       </div>
@@ -152,6 +175,8 @@ export default {
   },
   data() {
     return {
+      date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+      menu: false,
       aois: [],
       tab: 1,
       select: '',
@@ -248,5 +273,10 @@ export default {
 .v-expansion-panel-header {
   min-height: 32px;
   padding: 0;
+}
+.btn-reload {
+  transform: rotate(-90deg);
+  color: green;
+  cursor: pointer;
 }
 </style>
