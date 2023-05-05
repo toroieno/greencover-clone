@@ -13,8 +13,8 @@
                   dense
                   v-model="select"
                   return-object
-                  :items="items"
-                  item-text="state"
+                  :items="aoi"
+                  item-text="name"
                 ></v-select>
               </div>
             </div>
@@ -84,11 +84,20 @@
                           </span>
                           <v-card
                             width="100%"
-                            height="200"
                             class="rounded-xl mx-auto mt-8"
                             elevation="12"
                           >
-
+                            <v-row v-if="datajp.result">
+                              <v-col>{{ datajp.result.green_cover_area.toFixed(2) +' sqkm' }}</v-col>
+                              <v-col>
+                                <span style="color: rgb(137, 63, 242);font-weight: bold;font-size: 0.9vw;" >- </span>
+                                  Non Green Area: {{ this.datajp.result.non_green_area.toFixed(2) +' sqkm' }}
+                              </v-col>
+                              <v-col>
+                                <span style="color: rgb(137, 63, 242);font-weight: bold;font-size: 0.9vw;" >- </span>
+                                Water Area: {{ this.datajp.result.water_area.toFixed(2) + ' sqkm' }}
+                              </v-col>
+                            </v-row>
                           </v-card>
                         </v-col>
                         <v-col
@@ -100,11 +109,20 @@
                           </span>
                           <v-card
                             width="100%"
-                            height="200"
                             class="rounded-xl mx-auto mt-8"
                             elevation="12"
                           >
-
+                            <v-row v-if="datajp.compare_result">
+                              <v-col>{{ datajp.compare_result.green_cover_area.toFixed(2) +' sqkm' }}</v-col>
+                              <v-col>
+                                <span style="color: rgb(137, 63, 242);font-weight: bold;font-size: 0.9vw;" >- </span>
+                                  Non Green Area: {{ this.datajp.compare_result.non_green_area.toFixed(2) +' sqkm' }}
+                              </v-col>
+                              <v-col>
+                                <span style="color: rgb(137, 63, 242);font-weight: bold;font-size: 0.9vw;" >- </span>
+                                Water Area: {{ this.datajp.compare_result.water_area.toFixed(2) + ' sqkm' }}
+                              </v-col>
+                            </v-row>
                           </v-card>
                         </v-col>
                       </v-row>
@@ -115,17 +133,21 @@
                         >
                         <v-card
                             width="100%"
-                            min-height="150"
                             class="rounded-xl ma-0"
                             elevation="12"
                           >
-                        
+                            <v-row v-if="datajp.result && datajp.compare_result">
+                              <v-col>{{ Math.abs(datajp.result.area_percent_change.toFixed(2)) +' %' }}</v-col>
+                              <v-col>
+                                {{ (datajp.result.green_cover_area - datajp.compare_result.green_cover_area).toFixed(0) + 'sqkm'}}
+                              </v-col>
+                            </v-row>
                         </v-card>
                       </v-col>
                       </v-row>                 
                     </v-card>
                   </v-tab-item>
-
+                  <!-- /GREEN COVER -->
                   <!-- PLANT HEALTH -->
                   <v-tab-item style="height: calc(100vh - 295px);">
                     <v-card
@@ -152,11 +174,15 @@
                           </span>
                           <v-card
                             width="100%"
-                            height="200"
+                            
                             class="rounded-xl mx-auto mt-8"
                             elevation="12"
                           >
-
+                            <v-row v-for="(items,i) in datajp.plant_health" :key="i">
+                              <v-col>{{ items.label }}</v-col>
+                              <v-col>{{ items.color }}</v-col>
+                              <v-col>{{ items.value.toFixed(2) }}</v-col>
+                            </v-row>
                           </v-card>
                         </v-col>
                         <v-col
@@ -168,11 +194,14 @@
                           </span>
                           <v-card
                             width="100%"
-                            height="200"
                             class="rounded-xl mx-auto mt-8"
                             elevation="12"
                           >
-
+                            <v-row v-for="(items,i) in datajp.compare_plant_health" :key="i">
+                              <v-col>{{ items.label }}</v-col>
+                              <v-col>{{ items.color }}</v-col>
+                              <v-col>{{ items.value.toFixed(2) }}</v-col>
+                            </v-row>
                           </v-card>
                         </v-col>
                       </v-row>
@@ -183,17 +212,20 @@
                         >
                         <v-card
                             width="100%"
-                            min-height="150"
                             class="rounded-xl ma-0"
                             elevation="12"
-                          >
-                        
+                        >
+                          <v-row v-for="(items,i) in datajp.plant_health" :key="i">
+                            <v-col>{{ items.label }}</v-col>
+                            <v-col>{{ items.color }}</v-col>
+                            <v-col>{{ items.change_percent.toFixed(2) }}</v-col>
+                            </v-row>
                         </v-card>
                       </v-col>
                       </v-row>                 
                     </v-card>
                   </v-tab-item>
-                  
+                  <!-- /PLANT HEALTH -->
                   <!-- PLANT DENSITY -->
                   <v-tab-item style="height: calc(100vh - 295px);">
                     <v-card
@@ -220,11 +252,14 @@
                           </span>
                           <v-card
                             width="100%"
-                            height="200"
                             class="rounded-xl mx-auto mt-8"
                             elevation="12"
                           >
-
+                            <v-row v-for="(items,i) in datajp.green_density" :key="i">
+                              <v-col>{{ items.label }}</v-col>
+                              <v-col>{{ items.color }}</v-col>
+                              <v-col>{{ items.value.toFixed(2) }}</v-col>
+                            </v-row>
                           </v-card>
                         </v-col>
                         <v-col
@@ -236,11 +271,14 @@
                           </span>
                           <v-card
                             width="100%"
-                            height="200"
                             class="rounded-xl mx-auto mt-8"
                             elevation="12"
                           >
-
+                          <v-row v-for="(items,i) in datajp.compare_green_density" :key="i">
+                              <v-col>{{ items.label }}</v-col>
+                              <v-col>{{ items.color }}</v-col>
+                              <v-col>{{ items.value.toFixed(2) }}</v-col>
+                            </v-row>
                           </v-card>
                         </v-col>
                       </v-row>
@@ -251,20 +289,31 @@
                         >
                         <v-card
                             width="100%"
-                            min-height="150"
                             class="rounded-xl ma-0"
                             elevation="12"
                           >
-                        
+                          <v-row v-for="(items,i) in datajp.green_density" :key="i">
+                              <v-col>{{ items.label }}</v-col>
+                              <v-col>
+                              <div 
+                                :style="{backgroudColor:items.color,width:'100%',height:'3px'}"
+                              ></div></v-col>
+                              <v-col>{{ items.change_percent.toFixed(2) + '%'}}</v-col>
+                            </v-row>
                         </v-card>
                       </v-col>
                       </v-row>                 
                     </v-card>
                   </v-tab-item>
+                  <!-- /PLANT DENSITY -->
                 </v-tabs>
               </v-card>
             </div>
-            <div class="ml-6 d-flex flex-column" style="height: calc(100% - 5px); width: 50%;"></div>
+            <div class="ml-6 d-flex flex-column" style="height: calc(100% - 5px); width: 50%;">
+              <v-card>
+                <Dashboard :chartData="chart_data"/>
+              </v-card>
+            </div>
           </div>
         </div>
       </div>
@@ -273,21 +322,69 @@
 </template>
 
 <script>
+import Dashboard from '@/components/Dashboard'
+import api from '@/api/Api'
+
 export default {
   name: 'OverviewDB',
+  components: {
+    Dashboard
+  },
   data() {
     return {
+      month: [],
+      chart_data: [],
+      aoi: [],
+      datajp:[],
       select: {state:'Jaipur'},
-      items: [
-        {state:'Jaipur'},
-        {state:'Jodhpur'},
-        {state:'Kota'},
-        {state:'Mumbai'},
-        {state:'Nagpur'},
-        {state:'Pune'},
-        {state:'Singapore'},
-      ]
     }
+  },
+  methods: {
+    titleChart() {
+      this.month.forEach(y => {
+        this.chart_data.unshift({
+          year: y
+        }) 
+      })
+      // for(let i=0;i<this.month.length;i++) {
+      //   if(i==0) {
+      //     this.chart_data.unshift({
+      //         year: this.month[i]
+      //       }) 
+      //   }
+      // }
+    }
+  },
+  async created() {
+    // aoi
+    let resultAoi = await api.getAoi()
+    this.aoi = resultAoi.data.data
+    this.select = this.aoi[0]
+
+    // get month
+    let resultMonth = await api.getMonth()
+    this.month = resultMonth.data.data
+    this.titleChart(this.month)
+    console.log(this.month);
+
+    //dashboard
+    let params = {
+      month: this.month[1].split('-')[1],
+      compare_month: this.month[0].split('-')[1],
+      compare_year: this.month[0].split('-')[0],
+      year: this.month[1].split('-')[0],
+      source: 'sentinel',
+      overview_type: 'overall_green_cover',
+      aoi_id: 215,
+    }
+    let resultData = await api.getData(params)
+
+    console.log(resultData);
+
+    //result
+    let DataJaipur = await api.getJaipur()
+    this.datajp = DataJaipur.data.data
+    console.log(this.datajp.plant_health.length)
   }
 }
 </script>
