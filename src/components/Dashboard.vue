@@ -1,7 +1,6 @@
 <template>
   <div>
     <div id="my_dataviz"></div>
-    <div>{{dataCol}}</div>
   </div>
 </template>
 <script>
