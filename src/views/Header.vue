@@ -3,7 +3,7 @@
     <v-toolbar class="main-header" flat>
       <img alt="logo" src="/assets/imgs/logo.png" width="85" height="50" class="ml-2" />
       <div class="pr-8 pl-4">
-        <h3 class="db primary--text">DASHBOAD</h3>
+        <h3 class="db primary--text">DASHBOARD</h3>
       </div>
     </v-toolbar>
   </div>

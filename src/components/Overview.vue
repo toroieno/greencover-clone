@@ -108,12 +108,12 @@
                 <v-card class="elevation-0 rounded-tr-lg rounded-br-lg fill-height">
                   <v-layout class="flex-column fill-height">
                     <div class="map" style="height: 50%">
-                      <MapBox />
+                      <MapBox :data="dataMap"/>
                     </div>
                     <div class="db" style="height: 50%; padding-top: 20px;">
                       <v-row>
                         <v-col cols="12" md="8">
-                          <div class="dashboard" style="width: 100%">
+                          <div class="dashboard" style="width: 100%; position: relative;">
                             <span class="text-header-chart"
                               >Recorded trends of Green Cover Change</span
                             >
@@ -175,6 +175,7 @@ export default {
   },
   data() {
     return {
+      dataMap: {},
       date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       menu: false,
       aois: [],
@@ -218,7 +219,8 @@ export default {
     let resultAoi = await api.getAoi()
     this.aois = resultAoi.data.data
     this.selectAoi = this.aois[0]
-    console.log(this.aois);
+    this.dataMap = this.selectAoi.geometry
+    console.log('aoi', this.aois);
 
     let resultMonth = await api.getMonth()
     console.log(resultMonth);

@@ -15,10 +15,10 @@
             <v-item-group>
               <v-container>
                 <v-item>
-                  <v-btn class="active btn-choose mr-1" x-small elevation="0" tile>OVERVIEW</v-btn>
+                  <v-btn class="btn-choose mr-1" :class="{active: view === 'overview'}" x-small elevation="0" tile @click="view = 'overview'">OVERVIEW</v-btn>
                 </v-item>
                 <v-item>
-                  <v-btn class="btn-choose ml-1" x-small elevation="0" tile>MAP VIEW</v-btn>
+                  <v-btn class="btn-choose ml-1" :class="{active: view === 'map-view'}" x-small elevation="0" tile @click="view = 'map-view'">MAP VIEW</v-btn>
                 </v-item>
               </v-container>
             </v-item-group>
@@ -33,18 +33,21 @@
           size="64"
         ></v-progress-circular>
       </v-overlay>
-      <Overview :isLoading="isLoading" @update:isLoading="updateLoading"/>
+      <Overview v-if="view === 'overview'" :isLoading="isLoading" @update:isLoading="updateLoading"/>
+      <MapView v-if="view === 'map-view'"/>
     </v-layout>
   </v-layout>
 </template>
 
 <script>
 import Overview from '@/components/Overview'
+import MapView from '@/components/MapView'
 
 export default {
   name: 'Body-db',
   data() {
     return {
+      view: 'overview',
       isLoading: false,
     }
   },
@@ -54,7 +57,8 @@ export default {
     }
   },
   components: {
-    Overview
+    Overview,
+    MapView
   },
 }
 </script>
