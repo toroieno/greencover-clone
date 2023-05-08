@@ -9,41 +9,19 @@ import * as d3 from 'd3'
 export default {
   name: 'db-chart',
   components: {
-    
+  },
+  props: {
+    dataDB: Object,
   },
   data() {
     return {
-      chart_title: 'Your title goes here',
-      chart_data: [
-        //...
-        {hours: 1648, production: 9613, year: '2007'},
-        {hours: 2479, production: 6315, year: '2008'},
-        {hours: 2479, production: 6315, year: '2009'},
-        {hours: 3200, production: 2541, year: '2010'}
-      ],
-      chart_config: {
-        key: 'year',
-        currentKey: '2004',
-        values: ['hours', 'production'],
-        axis: {
-          xTicks: 3,
-        },
-        color: {
-          keys: {
-            hours: '#333',
-            production: '#d3d3d3',
-          },
-          default: '#222f3e',
-          current: '#41B882'
-        }
-      }
     }
   },
   mounted() {
     // set the dimensions and margins of the graph
     const margin = {top: 10, right: 30, bottom: 20, left: 50},
-        width = 460 - margin.left - margin.right,
-        height = 400 - margin.top - margin.bottom;
+        width = 500 - margin.left - margin.right,
+        height = 340 - margin.top - margin.bottom;
 
     // append the svg object to the body of the page
     const svg = d3.select("#my_dataviz")
@@ -55,7 +33,7 @@ export default {
 
     // Parse the Data
     d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/data_stacked.csv").then( function(data) {
-
+      console.log('dataMap', data);
       // List of subgroups = header of the csv files = soil condition here
       const subgroups = data.columns.slice(1)
 

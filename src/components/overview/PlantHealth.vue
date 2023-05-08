@@ -22,15 +22,15 @@
           <v-card class="rounded-lg elevation-2" style="min-height: 230px;">
             <div class="content-sqkm pl-2 pr-2 pt-10">
               <v-layout class="title justify-space-between primary--text mb-4">
-                <span style="font-size: 36px; font-weight: 400;">Plant Health</span>
-                <span style="font-size: 16px;">sqkm</span>
+                <span style="font-size: 36px; font-weight: 400;"><i>Plant Health</i></span>
+                <span style="font-size: 16px;"><i>sqkm</i></span>
               </v-layout>
               <v-layout class="align-center">
                 <v-row>
-                  <v-col cols="12" md="4">
+                  <v-col cols="12" md="5">
                     <span><b>Stressed</b></span>
                   </v-col>
-                  <v-col cols="12" md="6" class="pt-5">
+                  <v-col cols="12" md="5" class="pt-5">
                     <!-- <div style="height: 10px; max-width: 15vw; background-color: rgb(255, 152, 0); padding: 0;"></div> -->
                     <div :style="{height: '10px', maxWidth: '15vw', backgroundColor: 'rgb(255, 152, 0)', padding: 0}"></div>
                     
@@ -44,10 +44,10 @@
               </v-layout>
               <v-layout class="align-center">
                 <v-row>
-                  <v-col cols="12" md="4">
-                    <span><b>Stressed</b></span>
+                  <v-col cols="12" md="5">
+                    <span><b>Slightly Stressed</b></span>
                   </v-col>
-                  <v-col cols="12" md="6" class="pt-5">
+                  <v-col cols="12" md="5" class="pt-5">
                     <div style="height: 10px; max-width: 15vw; background-color: rgb(255, 152, 0); padding: 0;"></div>
                   </v-col>
                   <v-col cols="12" md="2">
@@ -59,10 +59,10 @@
               </v-layout>
               <v-layout class="align-center">
                 <v-row>
-                  <v-col cols="12" md="4">
-                    <span><b>Stressed</b></span>
+                  <v-col cols="12" md="5">
+                    <span><b>Healthy</b></span>
                   </v-col>
-                  <v-col cols="12" md="6" class="pt-5">
+                  <v-col cols="12" md="5" class="pt-5">
                     <div style="height: 10px; max-width: 15vw; background-color: rgb(255, 152, 0); padding: 0;"></div>
                   </v-col>
                   <v-col cols="12" md="2">
@@ -74,10 +74,10 @@
               </v-layout>
               <v-layout class="align-center">
                 <v-row>
-                  <v-col cols="12" md="4">
-                    <span><b>Stressed</b></span>
+                  <v-col cols="12" md="5">
+                    <span><b>Very Healthy</b></span>
                   </v-col>
-                  <v-col cols="12" md="6" class="pt-5">
+                  <v-col cols="12" md="5" class="pt-5">
                     <div style="height: 10px; max-width: 15vw; background-color: rgb(255, 152, 0); padding: 0;"></div>
                   </v-col>
                   <v-col cols="12" md="2">
@@ -91,10 +91,75 @@
           </v-card>
         </v-col>
         <v-col cols="12" md="6">
-          <v-card>
-            <v-layout>
-              content
-            </v-layout>
+          <v-card class="rounded-lg elevation-2" style="min-height: 230px;">
+            <div class="content-sqkm pl-2 pr-2 pt-10">
+              <v-layout class="title justify-space-between primary--text mb-4">
+                <span style="font-size: 36px; font-weight: 400;"><i>Plant Health</i></span>
+                <span style="font-size: 16px;"><i>sqkm</i></span>
+              </v-layout>
+              <v-layout class="align-center">
+                <v-row>
+                  <v-col cols="12" md="5">
+                    <span><b>Stressed</b></span>
+                  </v-col>
+                  <v-col cols="12" md="5" class="pt-5">
+                    <!-- <div style="height: 10px; max-width: 15vw; background-color: rgb(255, 152, 0); padding: 0;"></div> -->
+                    <div :style="{height: '10px', maxWidth: '15vw', backgroundColor: 'rgb(255, 152, 0)', padding: 0}"></div>
+                    
+                  </v-col>
+                  <v-col cols="12" md="2">
+                    <v-layout class="justify-end green--text">
+                      <span>3</span>
+                    </v-layout>
+                  </v-col>
+                </v-row>
+              </v-layout>
+              <v-layout class="align-center">
+                <v-row>
+                  <v-col cols="12" md="5">
+                    <span><b>Slightly Stressed</b></span>
+                  </v-col>
+                  <v-col cols="12" md="5" class="pt-5">
+                    <div style="height: 10px; max-width: 15vw; background-color: rgb(255, 152, 0); padding: 0;"></div>
+                  </v-col>
+                  <v-col cols="12" md="2">
+                    <v-layout class="justify-end green--text">
+                      <span>3</span>
+                    </v-layout>
+                  </v-col>
+                </v-row>
+              </v-layout>
+              <v-layout class="align-center">
+                <v-row>
+                  <v-col cols="12" md="5">
+                    <span><b>Healthy</b></span>
+                  </v-col>
+                  <v-col cols="12" md="5" class="pt-5">
+                    <div style="height: 10px; max-width: 15vw; background-color: rgb(255, 152, 0); padding: 0;"></div>
+                  </v-col>
+                  <v-col cols="12" md="2">
+                    <v-layout class="justify-end green--text">
+                      <span>3</span>
+                    </v-layout>
+                  </v-col>
+                </v-row>
+              </v-layout>
+              <v-layout class="align-center">
+                <v-row>
+                  <v-col cols="12" md="5">
+                    <span><b>Very Healthy</b></span>
+                  </v-col>
+                  <v-col cols="12" md="5" class="pt-5">
+                    <div style="height: 10px; max-width: 15vw; background-color: rgb(255, 152, 0); padding: 0;"></div>
+                  </v-col>
+                  <v-col cols="12" md="2">
+                    <v-layout class="justify-end green--text">
+                      <span>3</span>
+                    </v-layout>
+                  </v-col>
+                </v-row>
+              </v-layout>
+            </div>
           </v-card>
         </v-col>
       </v-row>

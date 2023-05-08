@@ -96,11 +96,15 @@
                   </v-tabs>
 
                   <v-tabs-items v-model="tab">
-                    <v-tab-item> 1 </v-tab-item>
+                    <v-tab-item>
+                      <GreenCover />
+                    </v-tab-item>
                     <v-tab-item>
                       <PlantHealth />
                     </v-tab-item>
-                    <v-tab-item> 3 </v-tab-item>
+                    <v-tab-item>
+                      <PlantDensity />
+                    </v-tab-item>
                   </v-tabs-items>
                 </v-card>
               </v-col>
@@ -117,7 +121,7 @@
                             <span class="text-header-chart"
                               >Recorded trends of Green Cover Change</span
                             >
-                            <Dashboard />
+                            <Dashboard :dataDB="dataDB"/>
                           </div>
                         </v-col>
                         <v-col cols="12" md="4">
@@ -162,20 +166,25 @@ import api from '@/api/Api'
 import PlantHealth from "@/components/overview/PlantHealth.vue";
 import Dashboard from "@/components/overview/Dashboard.vue";
 import MapBox from "@/components/overview/MapBox.vue";
+import GreenCover from './overview/GreenCover.vue';
+import PlantDensity from './overview/PlantDensity.vue';
 
 export default {
   name: "OverviewDB",
   components: {
     PlantHealth,
     Dashboard,
-    MapBox
-  },
+    MapBox,
+    GreenCover,
+    PlantDensity
+},
   props: {
     isLoading: Boolean,
   },
   data() {
     return {
       dataMap: {},
+      dataDB: {},
       date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       menu: false,
       aois: [],
@@ -211,6 +220,27 @@ export default {
     },
     loaded() {
       this.$emit('update:isLoading', false)
+    },
+    getDataDB(data) {
+      console.log('db', data);
+      const columns = data.plant_health.map(val => val.label)
+      let dataDB = {}
+      let plant_health = data.plant_health.reduce((re, val) => {
+        let obj = {}
+        obj[val.label] = val.value;
+        re = {...obj, ...re}
+        return re
+      }, {})
+      plant_health = {
+        ...plant_health,
+        group: "plant_health"
+      }
+
+      dataDB = {
+        plant_health,
+        columns
+      }
+      return dataDB
     }
   },
   async mounted() {
@@ -224,6 +254,10 @@ export default {
 
     let resultMonth = await api.getMonth()
     console.log(resultMonth);
+
+    let resultData = await api.getData()
+    this.dataDB = this.getDataDB(resultData.data.data)
+    console.log('data db', this.dataDB);
 
     this.loaded()
   }

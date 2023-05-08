@@ -26,9 +26,9 @@
     </div>
 
     <v-layout class="layers">
-      <div v-if="!layer" class="btn-layer " @click="layer=!layer">
-        <v-icon class="icon-layer" large>mdi-layers</v-icon>
-      </div>
+      <v-btn fab outlined v-if="!layer" class="btn-layer" @click="layer=!layer">
+        <v-icon class="icon-layer white--text" large>mdi-layers</v-icon>
+      </v-btn>
       <v-card v-else class="layer" rounded>
         <v-card-text>
           <v-layout class="header-layer justify-space-between">
@@ -223,6 +223,7 @@ export default {
   bottom: 10px;
 }
 .btn-layer {
+  border: 1px solid #bf99f5;
   background-color: #bf99f5;
   border-radius: 50%;
   height: 50px;
