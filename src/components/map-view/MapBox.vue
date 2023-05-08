@@ -1,6 +1,16 @@
 <template>
   <div style="height: 100%; position: relative">
-    <div v-if="view === 'overlay'" id="map" style="width: 100%; height: 100%"></div>
+    <div v-show="view === 'overlay'" id="map" style="width: 100%; height: 100%; position: relative;"></div>
+    <div v-show="view === 'slide'" id="comparison-container" style="width: 100%; height: 100%; position: relative;">
+      <div id="before" class="map"></div>
+      <div id="after" class="map"></div>
+    </div>
+    <div v-show="view === 'sync'" class="container-map" style="width: 100%; height: 100%; position: relative;">
+      <div id='map1' class='map-divider'></div>
+      <div class="divider"></div>
+      <div id='map2' class='map-divider'></div>
+    </div>
+    <!-- <div v-if="view === 'overlay'" id="map" style="width: 100%; height: 100%"></div>
     <div v-else-if="view === 'slide'" id="comparison-container">
       <div id="before" class="map"></div>
       <div id="after" class="map"></div>
@@ -9,12 +19,7 @@
       <div id='map1' class='map-divider'></div>
       <div class="divider"></div>
       <div id='map2' class='map-divider'></div>
-    </div>
-    <!-- <div v-else-if="view === 'slide'" id="comparison-container">
-      <div id="before" class="map"></div>
-      <div id="after" class="map"></div>
-    </div>
-    <div v-else>hi</div> -->
+    </div> -->
 
     <div class="right-side-bar">
       <div class="title">
@@ -29,6 +34,7 @@
                 <v-container>
                   <v-item>
                     <v-btn
+                      id="overlay"
                       class="btn-choose mr-1"
                       :class="{ active: view === 'overlay' }"
                       small
@@ -141,6 +147,8 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import 'mapbox-gl-compare/dist/mapbox-gl-compare.css';
 import MapboxCompare from 'mapbox-gl-compare';
 
+import api from '@/api/Api'
+
 export default {
   data() {
     return {
@@ -156,10 +164,10 @@ export default {
       lng: undefined,
       lat: undefined,
       zoom: undefined,
+      dataMap: [],
+      dataJaipur: {},
+      center: [0, 0],
     };
-  },
-  props: {
-    data: Object,
   },
   watch: {
     data(newValue) {
@@ -202,13 +210,12 @@ export default {
         });
       });
     },
-    // view(newValue) {
-    //   if (newValue === 'slide') {
-    //     this.initSlideMap()
-    //   }
-    // }
   },
   methods: {
+    getCenter(geometry) {
+      const center = turf.center(geometry);
+      return center.geometry.coordinates
+    },
     removeMap() {
       if (this.map) {
         this.map.remove()
@@ -223,9 +230,9 @@ export default {
         this.map2 = null
       }
     },
-    changeViewMap(view) {
-      this.removeMap()
+    async changeViewMap(view) {
       this.view = view
+      await this.removeMap()
       switch (view) {
         case 'overlay':
           this.initOverlayMap()
@@ -239,30 +246,35 @@ export default {
         default: 
           console.log('other');
       }
+      this.initTools()
     },
     initOverlayMap() {
+      const overlay = document.getElementById("map")
+      console.log('overlay', overlay);
       this.map = new mapboxgl.Map({
         // eslint-disable-line
         container: "map", // container ID
         style: "mapbox://styles/mapbox/streets-v12", // style URL
-        center: [-9, 9], // starting position [lng, lat]
+        center: this.center, // starting position [lng, lat]
         zoom: 10, // starting zoom
       });
+      // overlay.click()
     },
     initSlideMap() {
+      console.log('center', this.center);
       this.map1 = new mapboxgl.Map({
         container: 'before',
         // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
         style: 'mapbox://styles/mapbox/light-v11',
-        center: [0, 0],
-        zoom: 0
+        center: this.center,
+        zoom: 10
       });
       
       this.map2 = new mapboxgl.Map({
         container: 'after',
         style: 'mapbox://styles/mapbox/dark-v11',
-        center: [0, 0],
-        zoom: 0
+        center: this.center,
+        zoom: 10
       });
       
       // A selector or reference to HTML element
@@ -272,20 +284,23 @@ export default {
         // Set this to enable comparing two maps by mouse movement:
         // mousemove: true
       });
-      },
+
+      const divider = document.querySelector('.mapboxgl-compare');
+      divider.style.backgroundColor = '#893ff2';
+    },
     initSyncMap() {
       // Initialize the maps
       this.map1 = new mapboxgl.Map({
         container: 'map1',
         style: 'mapbox://styles/mapbox/streets-v11',
-        center: [-74.0066, 40.7135],
+        center: this.center,
         zoom: 10
       });
 
       this.map2 = new mapboxgl.Map({
         container: 'map2',
         style: 'mapbox://styles/mapbox/streets-v11',
-        center: [-74.0066, 40.7135],
+        center: this.center,
         zoom: 10
       });
 
@@ -295,14 +310,14 @@ export default {
         if (!disable) {
           var center = _this.map1.getCenter();
           var zoom = _this.map1.getZoom();
-          var pitch = _this.map1.getPitch();
-          var bearing = _this.map1.getBearing();
+          // var pitch = _this.map1.getPitch();
+          // var bearing = _this.map1.getBearing();
 
           disable = true;
           _this.map2.setCenter(center);
           _this.map2.setZoom(zoom);
-          _this.map2.setPitch(pitch);
-          _this.map2.setBearing(bearing);
+          // _this.map2.setPitch(pitch);
+          // _this.map2.setBearing(bearing);
           disable = false;
         }
       })
@@ -311,17 +326,39 @@ export default {
         if (!disable) {
           var center = _this.map2.getCenter();
           var zoom = _this.map2.getZoom();
-          var pitch = _this.map2.getPitch();
-          var bearing = _this.map2.getBearing();
+          // var pitch = _this.map2.getPitch();
+          // var bearing = _this.map2.getBearing();
 
           disable = true;
           _this.map1.setCenter(center);
           _this.map1.setZoom(zoom);
-          _this.map1.setPitch(pitch);
-          _this.map1.setBearing(bearing);
+          // _this.map1.setPitch(pitch);
+          // _this.map1.setBearing(bearing);
           disable = false;
         }
       })
+    },
+    initTools() {
+      const _this = this;
+      this.zoom = this.map.getZoom();
+
+      // add control zoom
+      this.map.addControl(new mapboxgl.NavigationControl(), "bottom-right");
+
+      // add get coordinates
+      this.map.on("mousemove", (e) => {
+        document.getElementById("coordinates").innerHTML =
+          e.lngLat.lng.toFixed(4) + " " + e.lngLat.lat.toFixed(4);
+      });
+
+      this.map.on("zoom", function () {
+        const zoom = _this.map.getZoom();
+        _this.zoom = zoom.toFixed(2);
+        const scale = _this.getScale(zoom);
+        console.log("Current zoom level:", zoom);
+        _this.scale = scale;
+        console.log("Current scale:", scale);
+      });
     },
     getScale(zoom) {
       const tileSize = 512;
@@ -349,32 +386,22 @@ export default {
     },
   },
 
-  mounted() {
+  async mounted() {
     mapboxgl.accessToken =
       "pk.eyJ1IjoidHJpZW5uZ3V5ZW4iLCJhIjoiY2xoNHV0cG1xMDI1NDNlczgxMnV1bWZqNyJ9.GcTfYm213EVxVNHWRU3Z_g";
+      
+    // lam the nay sai vl - goi api 1 lan thoi
+    const resultAoi = await api.getAoi()
+    this.dataMap = resultAoi.data.data
+    this.dataJaipur = this.dataMap.find((val) => val.name === "Jaipur")
+    this.center = this.getCenter(this.dataJaipur.geometry.features[0])
+    this.lng = this.center[0].toFixed(4);
+    this.lat = this.center[1].toFixed(4);
+    console.log(this.dataJaipur);
+
     this.initOverlayMap()
-
-    const _this = this;
-    this.zoom = this.map.getZoom();
-
-    // add control zoom
-    this.map.addControl(new mapboxgl.NavigationControl(), "bottom-right");
-
-    // add get coordinates
-    this.map.on("mousemove", (e) => {
-      document.getElementById("coordinates").innerHTML =
-        e.lngLat.lng.toFixed(4) + " " + e.lngLat.lat.toFixed(4);
-    });
-
-    this.map.on("zoom", function () {
-      const zoom = _this.map.getZoom();
-      _this.zoom = zoom.toFixed(2);
-      const scale = _this.getScale(zoom);
-      console.log("Current zoom level:", zoom);
-      _this.scale = scale;
-      console.log("Current scale:", scale);
-    });
-  },
+    this.initTools()
+    },
 };
 </script>
 <style scoped>
@@ -390,14 +417,16 @@ body * {
   -ms-user-select: none;
   user-select: none;
 }
-   
+ 
 .map {
   position: absolute;
   top: 0;
   bottom: 0;
   width: 100%;
 }
-
+.mapboxgl-compare {
+  background-color: red !important;
+}
 .map-divider {
   height: 100%;
   width: 50%;
