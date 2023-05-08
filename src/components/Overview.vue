@@ -180,7 +180,10 @@
                           >
                             <v-row v-for="(items,i) in datajp.plant_health" :key="i">
                               <v-col>{{ items.label }}</v-col>
-                              <v-col>{{ items.color }}</v-col>
+                              <v-col style="display: flex;align-items: center;">
+                              <div 
+                                :style="{backgroundColor:items.color,width:'100%',height:'3px'}"
+                              ></div></v-col>
                               <v-col>{{ items.value.toFixed(2) }}</v-col>
                             </v-row>
                           </v-card>
@@ -199,7 +202,10 @@
                           >
                             <v-row v-for="(items,i) in datajp.compare_plant_health" :key="i">
                               <v-col>{{ items.label }}</v-col>
-                              <v-col>{{ items.color }}</v-col>
+                              <v-col style="display: flex;align-items: center;">
+                              <div 
+                                :style="{backgroundColor:items.color,width:'100%',height:'3px'}"
+                              ></div></v-col>
                               <v-col>{{ items.value.toFixed(2) }}</v-col>
                             </v-row>
                           </v-card>
@@ -217,7 +223,10 @@
                         >
                           <v-row v-for="(items,i) in datajp.plant_health" :key="i">
                             <v-col>{{ items.label }}</v-col>
-                            <v-col>{{ items.color }}</v-col>
+                            <v-col style="display: flex;align-items: center;">
+                              <div 
+                                :style="{backgroundColor:items.color,width:'100%',height:'3px'}"
+                              ></div></v-col>
                             <v-col>{{ items.change_percent.toFixed(2) }}</v-col>
                             </v-row>
                         </v-card>
@@ -257,7 +266,10 @@
                           >
                             <v-row v-for="(items,i) in datajp.green_density" :key="i">
                               <v-col>{{ items.label }}</v-col>
-                              <v-col>{{ items.color }}</v-col>
+                              <v-col style="display: flex;align-items: center;">
+                              <div 
+                                :style="{backgroundColor:items.color,width:'100%',height:'3px'}"
+                              ></div></v-col>
                               <v-col>{{ items.value.toFixed(2) }}</v-col>
                             </v-row>
                           </v-card>
@@ -276,7 +288,10 @@
                           >
                           <v-row v-for="(items,i) in datajp.compare_green_density" :key="i">
                               <v-col>{{ items.label }}</v-col>
-                              <v-col>{{ items.color }}</v-col>
+                              <v-col style="display: flex;align-items: center;">
+                              <div 
+                                :style="{backgroundColor:items.color,width:'100%',height:'3px'}"
+                              ></div></v-col>
                               <v-col>{{ items.value.toFixed(2) }}</v-col>
                             </v-row>
                           </v-card>
@@ -294,9 +309,9 @@
                           >
                           <v-row v-for="(items,i) in datajp.green_density" :key="i">
                               <v-col>{{ items.label }}</v-col>
-                              <v-col>
+                              <v-col style="display: flex;align-items: center;">
                               <div 
-                                :style="{backgroudColor:items.color,width:'100%',height:'3px'}"
+                                :style="{backgroundColor:items.color,width:'100%',height:'3px'}"
                               ></div></v-col>
                               <v-col>{{ items.change_percent.toFixed(2) + '%'}}</v-col>
                             </v-row>
@@ -311,7 +326,7 @@
             </div>
             <div class="ml-6 d-flex flex-column" style="height: calc(100% - 5px); width: 50%;">
               <v-card>
-                
+                <Dashboard :dataJP="datajp" />
               </v-card>
             </div>
           </div>
@@ -324,10 +339,12 @@
 <script>
 
 import api from '@/api/Api'
+import Dashboard from '@/components/Dashboard'
 
 export default {
   name: 'OverviewDB',
   components: {
+    Dashboard
   },
   data() {
     return {
@@ -383,7 +400,7 @@ export default {
     //result
     let DataJaipur = await api.getJaipur()
     this.datajp = DataJaipur.data.data
-    console.log(this.datajp.plant_health.length)
+    // console.log(this.datajp)
   }
 }
 </script>
