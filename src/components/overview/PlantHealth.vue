@@ -168,8 +168,74 @@
       <v-row>
         <v-col cols="12" md="12">
           <v-card class="rounded-lg elevation-2" style="min-height: 230px;">
-            <v-layout>
-              content
+            <v-layout class="flex-column pa-5" style="width: 65%;">
+              <span style="font-size: 36px; text-tranform: uppercase; font-weight: 400; margin-bottom: 20px;"><i>% Change in Plant Health</i></span>
+              <v-layout class="align-center">
+                <v-row>
+                  <v-col cols="12" md="4">
+                    <span><b>Stressed</b></span>
+                  </v-col>
+                  <v-col cols="12" md="6" class="pt-5">
+                    <!-- <div style="height: 10px; max-width: 15vw; background-color: rgb(255, 152, 0); padding: 0;"></div> -->
+                    <div :style="{height: '10px', maxWidth: '15vw', backgroundColor: 'rgb(255, 152, 0)', padding: 0}"></div>
+                    
+                  </v-col>
+                  <v-col cols="12" md="2">
+                    <v-layout class="justify-end green--text">
+                      <span class="percent-change">0.00 %</span>
+                      <v-icon x-small color="green" >mdi-triangle</v-icon>
+                    </v-layout>
+                  </v-col>
+                </v-row>
+              </v-layout>
+              <v-layout class="align-center">
+                <v-row>
+                  <v-col cols="12" md="4">
+                    <span><b>Slightly Stressed</b></span>
+                  </v-col>
+                  <v-col cols="12" md="6" class="pt-5">
+                    <div style="height: 10px; max-width: 15vw; background-color: rgb(255, 152, 0); padding: 0;"></div>
+                  </v-col>
+                  <v-col cols="12" md="2">
+                    <v-layout class="justify-end green--text">
+                      <span class="percent-change">0.00 %</span>
+                      <v-icon x-small color="green" >mdi-triangle</v-icon>
+                    </v-layout>
+                  </v-col>
+                </v-row>
+              </v-layout>
+              <v-layout class="align-center">
+                <v-row>
+                  <v-col cols="12" md="4">
+                    <span><b>Healthy</b></span>
+                  </v-col>
+                  <v-col cols="12" md="6" class="pt-5">
+                    <div style="height: 10px; max-width: 15vw; background-color: rgb(255, 152, 0); padding: 0;"></div>
+                  </v-col>
+                  <v-col cols="12" md="2">
+                    <v-layout class="justify-end green--text">
+                      <span class="percent-change">0.00 %</span>
+                      <v-icon x-small color="green" >mdi-triangle</v-icon>
+                    </v-layout>
+                  </v-col>
+                </v-row>
+              </v-layout>
+              <v-layout class="align-center">
+                <v-row>
+                  <v-col cols="12" md="4">
+                    <span><b>Very Healthy</b></span>
+                  </v-col>
+                  <v-col cols="12" md="6" class="pt-5">
+                    <div style="height: 10px; max-width: 15vw; background-color: rgb(255, 152, 0); padding: 0;"></div>
+                  </v-col>
+                  <v-col cols="12" md="2">
+                    <v-layout class="justify-end green--text">
+                      <span class="percent-change">0.00 %</span>
+                      <v-icon x-small color="green" >mdi-triangle</v-icon>
+                    </v-layout>
+                  </v-col>
+                </v-row>
+              </v-layout>
             </v-layout>
           </v-card>
         </v-col>
@@ -183,5 +249,7 @@ export default {
 }
 </script>
 <style scoped>
-
+.percent-change {
+  font-size: 10px;
+}
 </style>
