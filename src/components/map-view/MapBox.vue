@@ -1,14 +1,27 @@
 <template>
   <div style="height: 100%; position: relative">
-    <div v-show="view === 'overlay'" id="map" style="width: 100%; height: 100%; position: relative;"></div>
-    <div v-show="view === 'slide'" id="comparison-container" style="width: 100%; height: 100%; position: relative;">
+    <div
+      v-show="view === 'overlay'"
+      id="map"
+      style="width: 100%; height: 100%; position: relative"
+    ></div>
+    <div id="distance" class="distance-container"></div>
+    <div
+      v-show="view === 'slide'"
+      id="comparison-container"
+      style="width: 100%; height: 100%; position: relative"
+    >
       <div id="before" class="map"></div>
       <div id="after" class="map"></div>
     </div>
-    <div v-show="view === 'sync'" class="container-map" style="width: 100%; height: 100%; position: relative;">
-      <div id='map1' class='map-divider'></div>
+    <div
+      v-show="view === 'sync'"
+      class="container-map"
+      style="width: 100%; height: 100%; position: relative"
+    >
+      <div id="map1" class="map-divider"></div>
       <div class="divider"></div>
-      <div id='map2' class='map-divider'></div>
+      <div id="map2" class="map-divider"></div>
     </div>
     <!-- <div v-if="view === 'overlay'" id="map" style="width: 100%; height: 100%"></div>
     <div v-else-if="view === 'slide'" id="comparison-container">
@@ -117,7 +130,7 @@
           <v-icon @click="downloadMapImage">mdi-camera</v-icon>
         </v-btn>
 
-        <v-btn fab class="btn-tool btn-ruler">
+        <v-btn fab class="btn-tool btn-ruler" @click="distanceTool()">
           <v-icon>mdi-ruler</v-icon>
         </v-btn>
         <v-btn fab class="btn-tool btn-polygon">
@@ -167,6 +180,17 @@ export default {
       dataMap: [],
       dataJaipur: {},
       center: [0, 0],
+      geojson: {
+        type: 'FeatureCollection',
+        features: []
+      },
+      linestring: {
+        type: 'Feature',
+        geometry: {
+          type: 'LineString',
+          coordinates: []
+        }
+      }
     };
   },
   watch: {
@@ -212,6 +236,88 @@ export default {
     },
   },
   methods: {
+    distanceTool() {
+      const _this = this
+      this.map.on('load', () => {
+        _this.map.addSource('geojson', {
+          type: 'geojson',
+          data: _this.geojson
+        });
+
+        _this.map.addLayer({
+          id: 'measure-points',
+          type: 'circle',
+          source: 'geojson',
+          paint: {
+            'circle-radius': 5,
+            'circle-color': '#000'
+          },
+          filter: ['in', '$type', 'Point']
+        });
+
+        _this.map.addLayer({
+          id: 'measure-lines',
+          type: 'line',
+          source: 'geojson',
+          layout: {
+            'line-cap': 'round',
+            'line-join': 'round'
+          },
+          paint: {
+            'line-color': '#000',
+            'line-width': 2.5
+          },
+          filter: ['in', '$type', 'LineString']
+        });
+
+        _this.map.on('click', (e) => {
+          const features = _this.map.queryRenderedFeatures(e.point, {
+            layers: ['measure-points']
+          });
+
+          if (_this.geojson.features.length > 1) _this.geojson.features.pop();
+
+          _this.$refs.distance.innerHTML = '';
+
+          if (features.length) {
+            const id = features[0].properties.id;
+            _this.geojson.features = _this.geojson.features.filter(point => point.properties.id !== id);
+          } else {
+            const point = {
+              type: 'Feature',
+              geometry: {
+                type: 'Point',
+                coordinates: [e.lngLat.lng, e.lngLat.lat]
+              },
+              properties: {
+                id: String(new Date().getTime())
+              }
+            };
+
+            _this.geojson.features.push(point);
+          }
+
+          if (_this.geojson.features.length > 1) {
+            _this.linestring.geometry.coordinates = _this.geojson.features.map(point => point.geometry.coordinates);
+            _this.geojson.features.push(_this.linestring);
+
+            const value = document.createElement('pre');
+            const distance = turf.length(_this.linestring);
+            value.textContent = `Total distance: ${distance.toLocaleString()}km`;
+            _this.$refs.distance.appendChild(value);
+          }
+
+          _this.map.getSource('geojson').setData(_this.geojson);
+        });
+      });
+
+      _this.map.on('mousemove', (e) => {
+          const features = _this.map.queryRenderedFeatures(e.point, {
+            layers: ['measure-points']
+          });
+          _this.map.getCanvas().style.cursor = features.length ? 'pointer' : 'crosshair';
+        });
+    },
     getCenter(geometry) {
       const center = turf.center(geometry);
       return center.geometry.coordinates
@@ -243,7 +349,7 @@ export default {
         case 'sync':
           this.initSyncMap()
           break
-        default: 
+        default:
           console.log('other');
       }
       this.initTools()
@@ -265,21 +371,21 @@ export default {
       this.map1 = new mapboxgl.Map({
         container: 'before',
         // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
-        style: 'mapbox://styles/mapbox/light-v11',
+        style: 'mapbox://styles/mapbox/streets-v12',
         center: this.center,
         zoom: 10
       });
-      
+
       this.map2 = new mapboxgl.Map({
         container: 'after',
-        style: 'mapbox://styles/mapbox/dark-v11',
+        style: 'mapbox://styles/mapbox/streets-v12',
         center: this.center,
         zoom: 10
       });
-      
+
       // A selector or reference to HTML element
       const container = '#comparison-container';
-      
+
       this.map = new MapboxCompare(this.map1, this.map2, container, {
         // Set this to enable comparing two maps by mouse movement:
         // mousemove: true
@@ -389,7 +495,7 @@ export default {
   async mounted() {
     mapboxgl.accessToken =
       "pk.eyJ1IjoidHJpZW5uZ3V5ZW4iLCJhIjoiY2xoNHV0cG1xMDI1NDNlczgxMnV1bWZqNyJ9.GcTfYm213EVxVNHWRU3Z_g";
-      
+
     // lam the nay sai vl - goi api 1 lan thoi
     const resultAoi = await api.getAoi()
     this.dataMap = resultAoi.data.data
@@ -405,11 +511,27 @@ export default {
 };
 </script>
 <style scoped>
+.distance-container {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1;
+}
 
+.distance-container > * {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 11px;
+  line-height: 18px;
+  display: block;
+  margin: 0;
+  padding: 5px 10px;
+  border-radius: 3px;
+}
 body {
   overflow: hidden;
-  }
-   
+}
+
 body * {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -417,7 +539,7 @@ body * {
   -ms-user-select: none;
   user-select: none;
 }
- 
+
 .map {
   position: absolute;
   top: 0;
